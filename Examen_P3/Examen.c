@@ -23,23 +23,29 @@ int main(){
     //Inicialización de arreglo de struct
     informacion *estudiante = calloc(cantidadAlumnos,sizeof(informacion*));
 
+    //Definición de punteros para manejar los ficheros
     FILE *archivo;
     FILE *escritura;
+
     if((archivo = fopen(archivoTXT,"r"))==NULL) printf("Error al abrir el acrhivo. Seguramente no existe");
     if((escritura = fopen(archivoTXT,"w"))==NULL) printf("Error al abrir el acrhivo. Seguramente no existe");
 
     char linea[100]; //Definición de cadena que almacena el contenido del fichero
 
-    while (fgets(linea,100,archivo))
-    {
-        linea[strlen(linea)-1] = '\0';
-        printf("%s\n", linea);
+    //Lectura de lineas dentro del fichero
+    for (int i = 0; i < cantidadAlumnos; i++){
+        if (fgets(linea, sizeof(linea), archivo) != NULL){
+            linea[strlen(linea)-1]='\0';
+            printf("%s\n", linea);
+            strcpy(estudiante[i].informacionPersonal,linea);
+        }
     }
 
-    for (int i = 0; i < cantidadAlumnos; i++)
-    {
-    //    fprintf("%s",linea);
+    //Impresión de datos al revés
+    for (int j = cantidadAlumnos; j > 0; j--){
+        fprintf(escritura,"%s\n",estudiante[j].informacionPersonal);
     }
+    
     
     return 0;
 }
