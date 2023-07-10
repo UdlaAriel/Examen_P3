@@ -1,41 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
+#include <ctype.h>
 
-char archivoCSV[] = "alumnos.txt";
+char archivoTXT[] = "alumnos.txt";
 
-typedef struct
-{
-    char InformacionPersonal[100];
-    int promedio;
-}Estudiante;
+typedef struct{
+    char informacionPersonal[100];
+    char ID[5];
+    char nombre[50];
+    char carrera[50];
+    float nota1;
+    float nota2;
+    float nota3;
+    float promedio;
+}informacion;
 
 int main(){
 
     int cantidadAlumnos = 5;
-    int i;
     //Inicialización de arreglo de struct
-    Estudiante *informacion = calloc(5, sizeof(Estudiante*));
+    informacion *estudiante = calloc(cantidadAlumnos,sizeof(informacion*));
 
     FILE *archivo;
-    if((archivo = fopen(archivoCSV,"r"))==NULL) printf("Error al abrir el acrhivo. Seguramente no existe");
+    FILE *escritura;
+    if((archivo = fopen(archivoTXT,"r"))==NULL) printf("Error al abrir el acrhivo. Seguramente no existe");
+    if((escritura = fopen(archivoTXT,"w"))==NULL) printf("Error al abrir el acrhivo. Seguramente no existe");
 
-    while (!feof(archivo))
+    char linea[100]; //Definición de cadena que almacena el contenido del fichero
+
+    while (fgets(linea,100,archivo))
     {
-        char linea[100];
-
-        fgets(linea,100,archivo);
-        //linea[strlen(linea)-1] = '\0';
+        linea[strlen(linea)-1] = '\0';
         printf("%s\n", linea);
-
-        strncpy(informacion[i].InformacionPersonal,linea,strlen(linea)-1);
     }
 
-    for (int i=cantidadAlumnos; i>0; i--)
+    for (int i = 0; i < cantidadAlumnos; i++)
     {
-        /* code */
+    //    fprintf("%s",linea);
     }
     
-
     return 0;
 }
