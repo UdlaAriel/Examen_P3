@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
 #include <ctype.h>
 
 char archivoTXT[] = "alumnos.txt";
@@ -21,7 +20,7 @@ int main(){
 
     int cantidadAlumnos = 5;
     //Inicialización de arreglo de struct
-    informacion *estudiante = calloc(cantidadAlumnos,sizeof(informacion*));
+    informacion *estudiante = calloc(5,sizeof(informacion*));
 
     //Definición de punteros para manejar los ficheros
     FILE *archivo;
@@ -35,17 +34,42 @@ int main(){
     //Lectura de lineas dentro del fichero
     for (int i = 0; i < cantidadAlumnos; i++){
         if (fgets(linea, sizeof(linea), archivo) != NULL){
-            linea[strlen(linea)-1]='\0';
-            printf("%s\n", linea);
-            strcpy(estudiante[i].informacionPersonal,linea);
+            char *ID = calloc(5,sizeof(char));
+            char *nombre = calloc(50,sizeof(char));
+            char *carrera = calloc(50,sizeof(char));
+            
+            char *token = strtok(linea,";");
+            int count = 0; //Definición de contador para guardar los TOKENS resultantes dentro de cada variable temporal.
+            while (token != NULL) {
+                if (count == 0) {
+                    ID = token;
+                    strcpy(estudiante[i].ID, token); //Copiar contenido de token a los atributos de cada persona.
+                } else if (count == 1) {
+                    nombre = token;
+                    strcpy(estudiante[i].nombre, token);
+                } else if (count == 2) {
+                    carrera = token;
+                    strcpy(estudiante[i].carrera, token);
+                } else if (count == 3) {
+                    estudiante[i].nota1 = atoi(token); //Transformación de strings a números
+                } else if (count == 4) {
+                    estudiante[i].nota2 = atoi(token); //Transformación de strings a números
+                } else if (count == 5) {
+                    estudiante[i].nota3 = atoi(token); //Transformación de strings a números
+                }
+
+                count++;
+                token = strtok(NULL, ";");
+            }
+            estudiante[i].promedio = (estudiante[i].nota1 +estudiante[i].nota2 +estudiante[i].nota3)/300;
+            printf("%.2f", estudiante[i].promedio);
         }
     }
 
     //Impresión de datos al revés
-    for (int j = cantidadAlumnos; j > 0; j--){
+    /*for (int j = cantidadAlumnos; j > 0; j--){
         fprintf(escritura,"%s\n",estudiante[j].informacionPersonal);
-    }
-    
+    }*/
     
     return 0;
 }
